@@ -17,6 +17,8 @@ import org.json.simple.JSONObject;
 public class Model_Inventory_Adjustment extends Model {
 
     //reference objects
+    //poInventory is intentionally NOT constructed in initialize() - see Inventory() below, which
+    //builds it lazily on first access so opening this record never touches Inventory.
     private Model_Inventory poInventory;
 
     @Override
@@ -44,7 +46,6 @@ public class Model_Inventory_Adjustment extends Model {
             poEntity.updateString("cTranStat", TransactionStatus.STATE_OPEN);
             poEntity.updateObject("dModified", poGRider.getServerDate());
 
-            poInventory = new InvModels(poGRider).Inventory();
             ID = poEntity.getMetaData().getColumnLabel(1);
             ID2 = poEntity.getMetaData().getColumnLabel(4);
             ID3 = poEntity.getMetaData().getColumnLabel(8);
@@ -207,6 +208,10 @@ public class Model_Inventory_Adjustment extends Model {
     }
 
     public Model_Inventory Inventory() throws SQLException, GuanzonException {
+        if (poInventory == null) {
+            poInventory = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals(getValue("sStockIDx"))) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
                     .getStockId().equals(getValue("sStockIDx"))) {

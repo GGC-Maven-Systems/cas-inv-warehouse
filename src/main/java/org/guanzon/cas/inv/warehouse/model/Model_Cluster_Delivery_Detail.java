@@ -3,12 +3,12 @@ package org.guanzon.cas.inv.warehouse.model;
 import java.sql.SQLException;
 import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.agent.services.ReferenceCache;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.cas.inv.warehouse.InventoryStockIssuanceNeo;
 import org.guanzon.cas.inv.warehouse.services.DeliveryIssuanceControllers;
-import org.guanzon.cas.inv.warehouse.services.DeliveryIssuanceModels;
 import org.guanzon.cas.parameter.model.Model_Branch;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
@@ -19,8 +19,12 @@ import org.json.simple.JSONObject;
  */
 public class Model_Cluster_Delivery_Detail extends Model {
 
+    //poBranch is intentionally NOT constructed in initialize() - see Branch() below, which
+    //builds it lazily on first access so opening this record never touches Branch. (poIssuance
+    //is a Transaction subclass, not a Model - out of scope for this pattern, left as-is.
+    //poInventoryMaster was previously eager-constructed here too but had no accessor anywhere
+    //in this class - removed as a dead field.)
     private Model_Branch poBranch;
-    private Model_Inventory_Transfer_Master poInventoryMaster;
     private InventoryStockIssuanceNeo poIssuance;
 
     @Override
@@ -48,8 +52,6 @@ public class Model_Cluster_Delivery_Detail extends Model {
             this.ID = poEntity.getMetaData().getColumnLabel(1);
             this.ID2 = poEntity.getMetaData().getColumnLabel(2);
 
-            this.poBranch = (new ParamModels(this.poGRider)).Branch();
-            this.poInventoryMaster = new DeliveryIssuanceModels(poGRider).InventoryTransferMaster();
             this.poIssuance = new DeliveryIssuanceControllers(poGRider, null).InventoryStockIssuanceNeo();
             poIssuance.initTransaction();
             poIssuance.setWithParent(true);
@@ -166,13 +168,23 @@ public class Model_Cluster_Delivery_Detail extends Model {
     }
 
     public Model_Branch Branch() throws SQLException, GuanzonException {
+        if (poBranch == null) {
+            poBranch = new ParamModels(poGRider).Branch();
+        }
+
         if (!"".equals(getValue("sBranchCd"))) {
             if (this.poBranch.getEditMode() == 1 && this.poBranch
                     .getBranchCode().equals(getValue("sBranchCd"))) {
                 return this.poBranch;
             }
+
+            if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+                return poBranch;
+            }
+
             this.poJSON = this.poBranch.openRecord((String) getValue("sBranchCd"));
             if ("success".equals(this.poJSON.get("result"))) {
+                ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
                 return this.poBranch;
             }
             this.poBranch.initialize();

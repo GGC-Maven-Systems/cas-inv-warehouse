@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
  */
 public class Model_Inventory_Transfer_Detail_Expiration extends Model {
 
+    //poInventory is intentionally NOT constructed in initialize() - see Inventory() below,
+    //which builds it lazily on first access so opening this record never touches Inventory.
     private Model_Inventory poInventory;
 
     @Override
@@ -40,8 +42,6 @@ public class Model_Inventory_Transfer_Detail_Expiration extends Model {
             poEntity.updateObject("nReceived", 0.0);
             ID = poEntity.getMetaData().getColumnLabel(1);
             ID2 = poEntity.getMetaData().getColumnLabel(2);
-
-            poInventory = new InvModels(poGRider).Inventory();
 
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
@@ -135,6 +135,10 @@ public class Model_Inventory_Transfer_Detail_Expiration extends Model {
     }
 
     public Model_Inventory Inventory() throws SQLException, GuanzonException {
+        if (poInventory == null) {
+            poInventory = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals(getValue("sStockIDx"))) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
                     .getStockId().equals(getValue("sStockIDx"))) {

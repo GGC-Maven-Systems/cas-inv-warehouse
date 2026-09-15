@@ -3,6 +3,7 @@ package org.guanzon.cas.inv.warehouse.model;
 import java.sql.SQLException;
 import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.agent.services.ReferenceCache;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
@@ -16,6 +17,9 @@ import org.guanzon.cas.parameter.services.ParamModels;
  */
 public class Model_Delivery_Schedule_Detail extends Model {
 
+    //poBranchCluster is intentionally NOT constructed in initialize() - see BranchCluster()
+    //below, which builds it lazily on first access so opening this record never touches
+    //Branch_Cluster.
     private Model_Branch_Cluster poBranchCluster;
 
     @Override
@@ -38,8 +42,6 @@ public class Model_Delivery_Schedule_Detail extends Model {
             poEntity.updateNull("dCancelld");
             ID = poEntity.getMetaData().getColumnLabel(1);
             ID2 = poEntity.getMetaData().getColumnLabel(2);
-
-            poBranchCluster = new ParamModels(poGRider).BranchCluster();
 
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
@@ -133,13 +135,23 @@ public class Model_Delivery_Schedule_Detail extends Model {
     }
 
     public Model_Branch_Cluster BranchCluster() throws SQLException, GuanzonException {
+        if (poBranchCluster == null) {
+            poBranchCluster = new ParamModels(poGRider).BranchCluster();
+        }
+
         if (!"".equals(getValue("sClustrID"))) {
             if (this.poBranchCluster.getEditMode() == 1 && this.poBranchCluster
                     .getClusterID().equals(getValue("sClustrID"))) {
                 return this.poBranchCluster;
             }
+
+            if (ReferenceCache.tryLoad("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster)) {
+                return poBranchCluster;
+            }
+
             this.poJSON = this.poBranchCluster.openRecord((String) getValue("sClustrID"));
             if ("success".equals(this.poJSON.get("result"))) {
+                ReferenceCache.store("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster);
                 return this.poBranchCluster;
             }
             this.poBranchCluster.initialize();
@@ -147,7 +159,7 @@ public class Model_Delivery_Schedule_Detail extends Model {
         }
         poBranchCluster.initialize();
         return this.poBranchCluster;
-        
+
     }
 
 }

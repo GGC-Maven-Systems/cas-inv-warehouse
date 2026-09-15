@@ -21,6 +21,9 @@ import org.json.simple.JSONObject;
  */
 public class Model_Inventory_Transfer_Detail extends Model {
 
+    //All reference fields below are intentionally NOT constructed in initialize() - see their
+    //accessors, which build them lazily on first access so opening this record never touches
+    //those tables.
     private Model_Inventory poInventorySupersede;
     private Model_Inventory poInventory;
     private Model_Inv_Serial poInventorySerial;
@@ -55,12 +58,6 @@ public class Model_Inventory_Transfer_Detail extends Model {
             poEntity.updateObject("dModified", poGRider.getServerDate());
             ID = poEntity.getMetaData().getColumnLabel(1);
             ID2 = poEntity.getMetaData().getColumnLabel(2);
-
-            poInventory = new InvModels(poGRider).Inventory();
-            poInventorySupersede = new InvModels(poGRider).Inventory();
-            poInventorySerial = new InvModels(poGRider).InventorySerial();
-            poInventoryStockRequest = new InvWarehouseModels(poGRider).InventoryStockRequestDetail();
-            poInventoryMaster = new InvModels(poGRider).InventoryMaster();
 
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
@@ -204,6 +201,10 @@ public class Model_Inventory_Transfer_Detail extends Model {
     }
 
     public Model_Inventory Inventory() throws SQLException, GuanzonException {
+        if (poInventory == null) {
+            poInventory = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals(getValue("sStockIDx"))) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
                     .getStockId().equals(getValue("sStockIDx"))) {
@@ -221,6 +222,10 @@ public class Model_Inventory_Transfer_Detail extends Model {
     }
 
     public Model_Inventory InventorySupersede() throws SQLException, GuanzonException {
+        if (poInventorySupersede == null) {
+            poInventorySupersede = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals(getValue("sOrigIDxx"))) {
             if (this.poInventorySupersede.getEditMode() == 1 && this.poInventorySupersede
                     .getStockId().equals(getValue("sOrigIDxx"))) {
@@ -238,6 +243,10 @@ public class Model_Inventory_Transfer_Detail extends Model {
     }
 
     public Model_Inv_Serial InventorySerial() throws SQLException, GuanzonException {
+        if (poInventorySerial == null) {
+            poInventorySerial = new InvModels(poGRider).InventorySerial();
+        }
+
         if (!"".equals(getValue("sSerialID"))) {
             if (this.poInventorySerial.getEditMode() == 1 && this.poInventorySerial
                     .getStockId().equals(getValue("sSerialID"))) {
@@ -255,6 +264,10 @@ public class Model_Inventory_Transfer_Detail extends Model {
     }
 
     public Model_Inv_Stock_Request_Detail InventoryStockRequest() throws SQLException, GuanzonException {
+        if (poInventoryStockRequest == null) {
+            poInventoryStockRequest = new InvWarehouseModels(poGRider).InventoryStockRequestDetail();
+        }
+
         if (!"".equals(getValue("sOrderNox")) && !"".equals(getValue("sStockIDx"))) {
             if (this.poInventoryStockRequest.getEditMode() == 1 && this.poInventoryStockRequest
                     .getTransactionNo().equals(getValue("sOrderNox"))
@@ -275,6 +288,10 @@ public class Model_Inventory_Transfer_Detail extends Model {
     }
 
     public Model_Inv_Master InventoryMaster() throws SQLException, GuanzonException {
+        if (poInventoryMaster == null) {
+            poInventoryMaster = new InvModels(poGRider).InventoryMaster();
+        }
+
         if (!"".equals(getValue("sStockIDx"))) {
             if (this.poInventoryMaster.getEditMode() == 1 && this.poInventoryMaster
                     .getStockId().equals(getValue("sStockIDx"))) {
