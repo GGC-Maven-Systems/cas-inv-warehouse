@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.agent.services.ReferenceCache;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.base.SQLUtil;
@@ -14,19 +15,21 @@ import org.guanzon.cas.inv.model.Model_Inv_Master;
 import org.guanzon.cas.inv.model.Model_Inventory;
 import org.guanzon.cas.parameter.model.Model_Brand;
 import org.guanzon.cas.inv.services.InvModels;
-import org.guanzon.cas.parameter.model.Model_Company;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
 public class Model_Inv_Stock_Request_Detail extends Model {
 
     //reference objects
+    //poInvMaster/poInventory/poBrand are intentionally NOT constructed in initialize() - see
+    //their accessors below, which build them lazily on first access so opening this record
+    //never touches those tables. (poCompany was previously eager-constructed here too but had
+    //no accessor anywhere in this class - removed as a dead field.)
     Model_Inv_Master poInvMaster;
     Model_Inventory poInventory;
     Model_Brand poBrand;
-    Model_Company poCompany;
-    
-        
+
+
     @Override
     public void initialize() {
         try {
@@ -66,15 +69,6 @@ public class Model_Inv_Stock_Request_Detail extends Model {
             ID = "sTransNox";
             ID2 = "nEntryNox";
 
-            //initialize reference objects
-            InvModels modelInv = new InvModels(poGRider);
-            poInvMaster = modelInv.InventoryMaster();
-            poInventory = modelInv.Inventory();
-            ParamModels model = new ParamModels(poGRider);
-            
-            poBrand = model.Brand();
-
-            poCompany = model.Company();
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
             logwrapr.severe(e.getMessage());
@@ -273,6 +267,10 @@ public class Model_Inv_Stock_Request_Detail extends Model {
     }
     //reference object models
     public Model_Inv_Master InvMaster() throws SQLException, GuanzonException {
+        if (poInvMaster == null) {
+            poInvMaster = new InvModels(poGRider).InventoryMaster();
+        }
+
         if (!"".equals((String) getValue("sStockIDx"))) {
             if (poInvMaster.getEditMode() == EditMode.READY
                     && poInvMaster.getStockId().equals((String) getValue("sStockIDx"))) {
@@ -294,6 +292,10 @@ public class Model_Inv_Stock_Request_Detail extends Model {
     }
 
     public Model_Inventory Inventory() throws SQLException, GuanzonException {
+        if (poInventory == null) {
+            poInventory = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals((String) getValue("sStockIDx"))) {
             if (poInventory.getEditMode() == EditMode.READY
                     && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {
@@ -353,9 +355,23 @@ public class Model_Inv_Stock_Request_Detail extends Model {
         return poJSON;
     }
     public Model_Brand Brand() throws GuanzonException, SQLException {
+        if (poBrand == null) {
+            poBrand = new ParamModels(poGRider).Brand();
+        }
+
         if (!"".equals(getBrandId())) {
+            if (poBrand.getEditMode() == EditMode.READY
+                    && poBrand.getBrandId().equals(getBrandId())) {
+                return poBrand;
+            }
+
+            if (ReferenceCache.tryLoad("Brand", getBrandId(), poBrand)) {
+                return poBrand;
+            }
+
             poJSON = poBrand.openRecord(getBrandId());
             if ("success".equals((String) poJSON.get("result"))) {
+                ReferenceCache.store("Brand", getBrandId(), poBrand);
                 return poBrand;
             } else {
                 poBrand.initialize();

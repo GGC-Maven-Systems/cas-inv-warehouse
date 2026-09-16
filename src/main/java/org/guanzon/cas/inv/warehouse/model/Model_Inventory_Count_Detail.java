@@ -3,6 +3,7 @@ package org.guanzon.cas.inv.warehouse.model;
 import java.sql.SQLException;
 import java.util.Date;
 import org.guanzon.appdriver.agent.services.Model;
+import org.guanzon.appdriver.agent.services.ReferenceCache;
 import org.guanzon.appdriver.base.GuanzonException;
 import org.guanzon.appdriver.base.MiscUtil;
 import org.guanzon.appdriver.constant.EditMode;
@@ -20,6 +21,9 @@ import org.json.simple.JSONObject;
  */
 public class Model_Inventory_Count_Detail extends Model {
 
+    //All reference fields below are intentionally NOT constructed in initialize() - see their
+    //accessors, which build them lazily on first access so opening this record never touches
+    //those tables.
     private Model_Inventory poInventory;
     private Model_Bin poBin;
     private Model_Section poSection;
@@ -51,11 +55,6 @@ public class Model_Inventory_Count_Detail extends Model {
             poEntity.updateObject("dModified", poGRider.getServerDate());
             ID = poEntity.getMetaData().getColumnLabel(1);
             ID2 = poEntity.getMetaData().getColumnLabel(2);
-
-            poInventory = new InvModels(poGRider).Inventory();
-            this.poBin = (new ParamModels(this.poGRider)).Bin();
-            this.poSection = (new ParamModels(this.poGRider)).Section();
-            this.poWarehouse = (new ParamModels(this.poGRider)).Warehouse();
 
             pnEditMode = EditMode.UNKNOWN;
         } catch (SQLException e) {
@@ -200,6 +199,10 @@ public class Model_Inventory_Count_Detail extends Model {
     }
 
     public Model_Inventory Inventory() throws SQLException, GuanzonException {
+        if (poInventory == null) {
+            poInventory = new InvModels(poGRider).Inventory();
+        }
+
         if (!"".equals(getValue("sStockIDx"))) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
                     .getStockId().equals(getValue("sStockIDx"))) {
@@ -217,13 +220,23 @@ public class Model_Inventory_Count_Detail extends Model {
     }
 
     public Model_Bin Bin() throws SQLException, GuanzonException {
+        if (poBin == null) {
+            poBin = new ParamModels(poGRider).Bin();
+        }
+
         if (!"".equals(getValue("sBinIDxxx"))) {
             if (this.poBin.getEditMode() == 1 && this.poBin
                     .getBinId().equals(getValue("sBinIDxxx"))) {
                 return this.poBin;
             }
+
+            if (ReferenceCache.tryLoad("Bin", (String) getValue("sBinIDxxx"), poBin)) {
+                return poBin;
+            }
+
             this.poJSON = this.poBin.openRecord((String) getValue("sBinIDxxx"));
             if ("success".equals(this.poJSON.get("result"))) {
+                ReferenceCache.store("Bin", (String) getValue("sBinIDxxx"), poBin);
                 return this.poBin;
             }
             this.poBin.initialize();
@@ -234,13 +247,23 @@ public class Model_Inventory_Count_Detail extends Model {
     }
 
     public Model_Section Section() throws SQLException, GuanzonException {
+        if (poSection == null) {
+            poSection = new ParamModels(poGRider).Section();
+        }
+
         if (!"".equals(getValue("sSectnIDx"))) {
             if (this.poSection.getEditMode() == 1 && this.poSection
                     .getSectionId().equals(getValue("sSectnIDx"))) {
                 return this.poSection;
             }
+
+            if (ReferenceCache.tryLoad("Section", (String) getValue("sSectnIDx"), poSection)) {
+                return poSection;
+            }
+
             this.poJSON = this.poSection.openRecord((String) getValue("sSectnIDx"));
             if ("success".equals(this.poJSON.get("result"))) {
+                ReferenceCache.store("Section", (String) getValue("sSectnIDx"), poSection);
                 return this.poSection;
             }
             this.poSection.initialize();
@@ -251,13 +274,23 @@ public class Model_Inventory_Count_Detail extends Model {
     }
 
     public Model_Warehouse Warehouse() throws SQLException, GuanzonException {
+        if (poWarehouse == null) {
+            poWarehouse = new ParamModels(poGRider).Warehouse();
+        }
+
         if (!"".equals(getValue("sWHouseID"))) {
             if (this.poWarehouse.getEditMode() == 1 && this.poWarehouse
                     .getWarehouseId().equals(getValue("sWHouseID"))) {
                 return this.poWarehouse;
             }
+
+            if (ReferenceCache.tryLoad("Warehouse", (String) getValue("sWHouseID"), poWarehouse)) {
+                return poWarehouse;
+            }
+
             this.poJSON = this.poWarehouse.openRecord((String) getValue("sWHouseID"));
             if ("success".equals(this.poJSON.get("result"))) {
+                ReferenceCache.store("Warehouse", (String) getValue("sWHouseID"), poWarehouse);
                 return this.poWarehouse;
             }
             this.poWarehouse.initialize();
