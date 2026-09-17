@@ -10,8 +10,6 @@ import org.guanzon.cas.inv.model.Model_Inv_Master;
 import org.guanzon.cas.inv.model.Model_Inv_Serial;
 import org.guanzon.cas.inv.model.Model_Inventory;
 import org.guanzon.cas.inv.services.InvModels;
-import org.guanzon.cas.inv.warehouse.model.Model_Inv_Stock_Request_Detail;
-import org.guanzon.cas.inv.warehouse.model.Model_Inv_Stock_Request_Master;
 import org.guanzon.cas.inv.warehouse.services.InvWarehouseModels;
 import org.json.simple.JSONObject;
 
@@ -204,13 +202,15 @@ public class Model_Inventory_Transfer_Detail extends Model {
         if (poInventory == null) {
             poInventory = new InvModels(poGRider).Inventory();
         }
+        
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
 
-        if (!"".equals(getValue("sStockIDx"))) {
+        if (!"".equals(id)) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
-                    .getStockId().equals(getValue("sStockIDx"))) {
+                    .getStockId().equals(id)) {
                 return this.poInventory;
             }
-            this.poJSON = this.poInventory.openRecord((String) getValue("sStockIDx"));
+            this.poJSON = this.poInventory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventory;
             }
@@ -225,13 +225,15 @@ public class Model_Inventory_Transfer_Detail extends Model {
         if (poInventorySupersede == null) {
             poInventorySupersede = new InvModels(poGRider).Inventory();
         }
+        
+        String id = (String) (getValue("sOrigIDxx") == null ? "" : getValue("sOrigIDxx"));
 
-        if (!"".equals(getValue("sOrigIDxx"))) {
+        if (!"".equals(id)) {
             if (this.poInventorySupersede.getEditMode() == 1 && this.poInventorySupersede
-                    .getStockId().equals(getValue("sOrigIDxx"))) {
+                    .getStockId().equals(id)) {
                 return this.poInventorySupersede;
             }
-            this.poJSON = this.poInventorySupersede.openRecord((String) getValue("sOrigIDxx"));
+            this.poJSON = this.poInventorySupersede.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventorySupersede;
             }
@@ -247,12 +249,14 @@ public class Model_Inventory_Transfer_Detail extends Model {
             poInventorySerial = new InvModels(poGRider).InventorySerial();
         }
 
-        if (!"".equals(getValue("sSerialID"))) {
+        String id = (String) (getValue("sSerialID") == null ? "" : getValue("sSerialID"));
+        
+        if (!"".equals(id)) {
             if (this.poInventorySerial.getEditMode() == 1 && this.poInventorySerial
-                    .getStockId().equals(getValue("sSerialID"))) {
+                    .getStockId().equals(id)) {
                 return this.poInventorySerial;
             }
-            this.poJSON = this.poInventorySerial.openRecord((String) getValue("sSerialID"));
+            this.poJSON = this.poInventorySerial.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventorySerial;
             }
@@ -267,15 +271,17 @@ public class Model_Inventory_Transfer_Detail extends Model {
         if (poInventoryStockRequest == null) {
             poInventoryStockRequest = new InvWarehouseModels(poGRider).InventoryStockRequestDetail();
         }
-
-        if (!"".equals(getValue("sOrderNox")) && !"".equals(getValue("sStockIDx"))) {
+        
+        String id = (String) (getValue("sOrderNox") == null ? "" : getValue("sOrderNox"));
+        
+        if (!"".equals(id) && !"".equals(id)) {
             if (this.poInventoryStockRequest.getEditMode() == 1 && this.poInventoryStockRequest
-                    .getTransactionNo().equals(getValue("sOrderNox"))
+                    .getTransactionNo().equals(id)
                     && this.poInventoryStockRequest.getEditMode() == 1 && this.poInventoryStockRequest
                     .getStockId().equals(getValue("sStockIDx"))) {
                 return this.poInventoryStockRequest;
             }
-            this.poJSON = this.poInventoryStockRequest.openRecordByReference((String) getValue("sOrderNox"),
+            this.poJSON = this.poInventoryStockRequest.openRecordByReference(id,
                     (String) getValue("sStockIDx"));
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventoryStockRequest;
@@ -291,13 +297,15 @@ public class Model_Inventory_Transfer_Detail extends Model {
         if (poInventoryMaster == null) {
             poInventoryMaster = new InvModels(poGRider).InventoryMaster();
         }
+        
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
 
-        if (!"".equals(getValue("sStockIDx"))) {
+        if (!"".equals(id)) {
             if (this.poInventoryMaster.getEditMode() == 1 && this.poInventoryMaster
-                    .getStockId().equals(getValue("sStockIDx"))) {
+                    .getStockId().equals(id)) {
                 return this.poInventoryMaster;
             }
-            this.poJSON = this.poInventoryMaster.openRecord((String) getValue("sStockIDx"), poGRider.getIndustry(), poGRider.getBranchCode());
+            this.poJSON = this.poInventoryMaster.openRecord(id, poGRider.getIndustry(), poGRider.getBranchCode());
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventoryMaster;
             }

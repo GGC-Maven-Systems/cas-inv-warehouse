@@ -171,20 +171,22 @@ public class Model_Cluster_Delivery_Detail extends Model {
         if (poBranch == null) {
             poBranch = new ParamModels(poGRider).Branch();
         }
+        
+        String id = (String) (getValue("sBranchCd") == null ? "" : getValue("sBranchCd"));
 
-        if (!"".equals(getValue("sBranchCd"))) {
+        if (!"".equals(id)) {
             if (this.poBranch.getEditMode() == 1 && this.poBranch
-                    .getBranchCode().equals(getValue("sBranchCd"))) {
+                    .getBranchCode().equals(id)) {
                 return this.poBranch;
             }
 
-            if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+            if (ReferenceCache.tryLoad("Branch", id, poBranch)) {
                 return poBranch;
             }
 
-            this.poJSON = this.poBranch.openRecord((String) getValue("sBranchCd"));
+            this.poJSON = this.poBranch.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
+                ReferenceCache.store("Branch", id, poBranch);
                 return this.poBranch;
             }
             this.poBranch.initialize();
@@ -195,34 +197,32 @@ public class Model_Cluster_Delivery_Detail extends Model {
     }
 
     public InventoryStockIssuanceNeo InventoryTransfer() throws SQLException, GuanzonException, CloneNotSupportedException {
-        if (!"".equals(getValue("sReferNox")) && getValue("sReferNox") != null) {
+        String id = (String) (getValue("sReferNox") == null ? "" : getValue("sReferNox"));
+        
+        if (!"".equals(id) && id != null) {
             if (this.poIssuance
                     .getMaster().getTransactionNo() != null) {
                 if (this.poIssuance.getEditMode() == 0 && this.poIssuance
-                        .getMaster().getTransactionNo().equals(getValue("sReferNox"))) {
+                        .getMaster().getTransactionNo().equals(id)) {
 
                     poIssuance.setWithParent(true);
                     return this.poIssuance;
                 }
                 if (this.poIssuance.getEditMode() == 1 && this.poIssuance
-                        .getMaster().getTransactionNo().equals(getValue("sReferNox"))) {
+                        .getMaster().getTransactionNo().equals(id)) {
 
                     poIssuance.setWithParent(true);
                     return this.poIssuance;
                 }
                 if (this.poIssuance.getEditMode() == 2 && this.poIssuance
-                        .getMaster().getTransactionNo().equals(getValue("sReferNox"))) {
+                        .getMaster().getTransactionNo().equals(id)) {
 
                     poIssuance.setWithParent(true);
                     return this.poIssuance;
                 }
             }
-            this.poJSON = this.poIssuance.OpenTransaction((String) getValue("sReferNox"));
+            this.poJSON = this.poIssuance.OpenTransaction(id);
             if ("success".equals(this.poJSON.get("result"))) {
-//                if (poIssuance.getEditMode() != EditMode.ADDNEW) {
-//                    //auto update mode
-////                    poIssuance.UpdateTransaction();
-//                }
                 return this.poIssuance;
             }
             this.poIssuance.initTransaction();

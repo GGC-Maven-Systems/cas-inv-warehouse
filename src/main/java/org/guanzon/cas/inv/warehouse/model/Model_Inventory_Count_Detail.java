@@ -202,13 +202,15 @@ public class Model_Inventory_Count_Detail extends Model {
         if (poInventory == null) {
             poInventory = new InvModels(poGRider).Inventory();
         }
+        
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
 
-        if (!"".equals(getValue("sStockIDx"))) {
+        if (!"".equals(id)) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
                     .getStockId().equals(getValue("sStockIDx"))) {
                 return this.poInventory;
             }
-            this.poJSON = this.poInventory.openRecord((String) getValue("sStockIDx"));
+            this.poJSON = this.poInventory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventory;
             }
@@ -223,20 +225,22 @@ public class Model_Inventory_Count_Detail extends Model {
         if (poBin == null) {
             poBin = new ParamModels(poGRider).Bin();
         }
+        
+        String id = (String) (getValue("sBinIDxxx") == null ? "" : getValue("sBinIDxxx"));
 
-        if (!"".equals(getValue("sBinIDxxx"))) {
+        if (!"".equals(id)) {
             if (this.poBin.getEditMode() == 1 && this.poBin
-                    .getBinId().equals(getValue("sBinIDxxx"))) {
+                    .getBinId().equals(id)) {
                 return this.poBin;
             }
 
-            if (ReferenceCache.tryLoad("Bin", (String) getValue("sBinIDxxx"), poBin)) {
+            if (ReferenceCache.tryLoad("Bin", id, poBin)) {
                 return poBin;
             }
 
-            this.poJSON = this.poBin.openRecord((String) getValue("sBinIDxxx"));
+            this.poJSON = this.poBin.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Bin", (String) getValue("sBinIDxxx"), poBin);
+                ReferenceCache.store("Bin", id, poBin);
                 return this.poBin;
             }
             this.poBin.initialize();
@@ -250,20 +254,22 @@ public class Model_Inventory_Count_Detail extends Model {
         if (poSection == null) {
             poSection = new ParamModels(poGRider).Section();
         }
+        
+        String id = (String) (getValue("sSectnIDx") == null ? "" : getValue("sSectnIDx"));
 
-        if (!"".equals(getValue("sSectnIDx"))) {
+        if (!"".equals(id)) {
             if (this.poSection.getEditMode() == 1 && this.poSection
-                    .getSectionId().equals(getValue("sSectnIDx"))) {
+                    .getSectionId().equals(id)) {
                 return this.poSection;
             }
 
-            if (ReferenceCache.tryLoad("Section", (String) getValue("sSectnIDx"), poSection)) {
+            if (ReferenceCache.tryLoad("Section", id, poSection)) {
                 return poSection;
             }
 
-            this.poJSON = this.poSection.openRecord((String) getValue("sSectnIDx"));
+            this.poJSON = this.poSection.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Section", (String) getValue("sSectnIDx"), poSection);
+                ReferenceCache.store("Section", id, poSection);
                 return this.poSection;
             }
             this.poSection.initialize();
@@ -278,19 +284,21 @@ public class Model_Inventory_Count_Detail extends Model {
             poWarehouse = new ParamModels(poGRider).Warehouse();
         }
 
-        if (!"".equals(getValue("sWHouseID"))) {
+        String id = (String) (getValue("sWHouseID") == null ? "" : getValue("sWHouseID"));
+        
+        if (!"".equals(id)) {
             if (this.poWarehouse.getEditMode() == 1 && this.poWarehouse
-                    .getWarehouseId().equals(getValue("sWHouseID"))) {
+                    .getWarehouseId().equals(id)) {
                 return this.poWarehouse;
             }
 
-            if (ReferenceCache.tryLoad("Warehouse", (String) getValue("sWHouseID"), poWarehouse)) {
+            if (ReferenceCache.tryLoad("Warehouse", id, poWarehouse)) {
                 return poWarehouse;
             }
 
-            this.poJSON = this.poWarehouse.openRecord((String) getValue("sWHouseID"));
+            this.poJSON = this.poWarehouse.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Warehouse", (String) getValue("sWHouseID"), poWarehouse);
+                ReferenceCache.store("Warehouse", id, poWarehouse);
                 return this.poWarehouse;
             }
             this.poWarehouse.initialize();

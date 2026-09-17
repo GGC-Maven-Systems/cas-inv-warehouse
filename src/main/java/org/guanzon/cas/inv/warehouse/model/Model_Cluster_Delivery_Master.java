@@ -313,20 +313,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poCategory == null) {
             poCategory = new ParamModels(poGRider).Category();
         }
+        
+        String id = (String) (getValue("sCategrCd") == null ? "" : getValue("sCategrCd"));
 
-        if (!"".equals(getValue("sCategrCd"))) {
+        if (!"".equals(id)) {
             if (this.poCategory.getEditMode() == 1 && this.poCategory
-                    .getCategoryId().equals(getValue("sCategrCd"))) {
+                    .getCategoryId().equals(id)) {
                 return this.poCategory;
             }
 
-            if (ReferenceCache.tryLoad("Category", (String) getValue("sCategrCd"), poCategory)) {
+            if (ReferenceCache.tryLoad("Category", id, poCategory)) {
                 return poCategory;
             }
 
-            this.poJSON = this.poCategory.openRecord((String) getValue("sCategrCd"));
+            this.poJSON = this.poCategory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Category", (String) getValue("sCategrCd"), poCategory);
+                ReferenceCache.store("Category", id, poCategory);
                 return this.poCategory;
             }
             this.poCategory.initialize();
@@ -340,20 +342,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poBranch == null) {
             poBranch = new ParamModels(poGRider).Branch();
         }
+        
+        String id = (String) (getValue("sBranchCd") == null ? "" : getValue("sBranchCd"));
 
-        if (!"".equals(getValue("sBranchCd"))) {
+        if (!"".equals(id)) {
             if (this.poBranch.getEditMode() == 1 && this.poBranch
-                    .getBranchCode().equals(getValue("sBranchCd"))) {
+                    .getBranchCode().equals(id)) {
                 return this.poBranch;
             }
 
-            if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+            if (ReferenceCache.tryLoad("Branch", id, poBranch)) {
                 return poBranch;
             }
 
-            this.poJSON = this.poBranch.openRecord((String) getValue("sBranchCd"));
+            this.poJSON = this.poBranch.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
+                ReferenceCache.store("Branch", id, poBranch);
                 return this.poBranch;
             }
             this.poBranch.initialize();
@@ -367,20 +371,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poCompany == null) {
             poCompany = new ParamModels(poGRider).Company();
         }
+        
+        String id = (String) (getValue("sCompnyID") == null ? "" : getValue("sCompnyID"));
 
-        if (!"".equals(getValue("sCompnyID"))) {
+        if (!"".equals(id)) {
             if (this.poCompany.getEditMode() == 1 && this.poCompany
-                    .getCompanyId().equals(getValue("sCompnyID"))) {
+                    .getCompanyId().equals(id)) {
                 return this.poCompany;
             }
 
-            if (ReferenceCache.tryLoad("Company", (String) getValue("sCompnyID"), poCompany)) {
+            if (ReferenceCache.tryLoad("Company", id, poCompany)) {
                 return poCompany;
             }
 
-            this.poJSON = this.poCompany.openRecord((String) getValue("sCompnyID"));
+            this.poJSON = this.poCompany.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Company", (String) getValue("sCompnyID"), poCompany);
+                ReferenceCache.store("Company", id, poCompany);
                 return this.poCompany;
             }
             this.poCompany.initialize();
@@ -394,20 +400,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poIndustry == null) {
             poIndustry = new ParamModels(poGRider).Industry();
         }
+        
+        String id = (String) (getValue("sIndstCdx") == null ? "" : getValue("sIndstCdx"));
 
-        if (!"".equals(getValue("sIndstCdx"))) {
+        if (!"".equals(id)) {
             if (this.poIndustry.getEditMode() == 1 && this.poIndustry
-                    .getIndustryId().equals(getValue("sIndstCdx"))) {
+                    .getIndustryId().equals(id)) {
                 return this.poIndustry;
             }
 
-            if (ReferenceCache.tryLoad("Industry", (String) getValue("sIndstCdx"), poIndustry)) {
+            if (ReferenceCache.tryLoad("Industry", id, poIndustry)) {
                 return poIndustry;
             }
 
-            this.poJSON = this.poIndustry.openRecord((String) getValue("sIndstCdx"));
+            this.poJSON = this.poIndustry.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Industry", (String) getValue("sIndstCdx"), poIndustry);
+                ReferenceCache.store("Industry", id, poIndustry);
                 return this.poIndustry;
             }
             this.poIndustry.initialize();
@@ -421,20 +429,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poClient == null) {
             poClient = new ClientModels(poGRider).ClientMaster();
         }
+        
+        String id = (String) (getValue("sDriverID") == null ? "" : getValue("sDriverID"));
 
-        if (!"".equals(getValue("sDriverID"))) {
+        if (!"".equals(id)) {
             if (this.poClient.getEditMode() == 1 && this.poClient
-                    .getClientId().equals(getValue("sDriverID"))) {
+                    .getClientId().equals(id)) {
                 return this.poClient;
             }
 
-            if (ReferenceCache.tryLoad("Client_Master", (String) getValue("sDriverID"), poClient)) {
+            if (ReferenceCache.tryLoad("Client_Master", id, poClient)) {
                 return poClient;
             }
 
-            this.poJSON = this.poClient.openRecord((String) getValue("sDriverID"));
+            this.poJSON = this.poClient.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Client_Master", (String) getValue("sDriverID"), poClient);
+                ReferenceCache.store("Client_Master", id, poClient);
                 return this.poClient;
             }
             this.poClient.initialize();
@@ -448,20 +458,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poClient01 == null) {
             poClient01 = new ClientModels(poGRider).ClientMaster();
         }
+        
+        String id = (String) (getValue("sEmploy01") == null ? "" : getValue("sEmploy01"));
 
-        if (!"".equals(getValue("sEmploy01"))) {
+        if (!"".equals(id)) {
             if (this.poClient01.getEditMode() == 1 && this.poClient01
-                    .getClientId().equals(getValue("sEmploy01"))) {
+                    .getClientId().equals(id)) {
                 return this.poClient01;
             }
 
-            if (ReferenceCache.tryLoad("Client_Master", (String) getValue("sEmploy01"), poClient01)) {
+            if (ReferenceCache.tryLoad("Client_Master", id, poClient01)) {
                 return poClient01;
             }
 
-            this.poJSON = this.poClient01.openRecord((String) getValue("sEmploy01"));
+            this.poJSON = this.poClient01.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Client_Master", (String) getValue("sEmploy01"), poClient01);
+                ReferenceCache.store("Client_Master", id, poClient01);
                 return this.poClient01;
             }
             this.poClient01.initialize();
@@ -476,19 +488,21 @@ public class Model_Cluster_Delivery_Master extends Model {
             poClient02 = new ClientModels(poGRider).ClientMaster();
         }
 
-        if (!"".equals(getValue("sEmploy02"))) {
+        String id = (String) (getValue("sEmploy02") == null ? "" : getValue("sEmploy02"));
+        
+        if (!"".equals(id)) {
             if (this.poClient02.getEditMode() == 1 && this.poClient02
-                    .getClientId().equals(getValue("sEmploy02"))) {
+                    .getClientId().equals(id)) {
                 return this.poClient02;
             }
 
-            if (ReferenceCache.tryLoad("Client_Master", (String) getValue("sEmploy02"), poClient02)) {
+            if (ReferenceCache.tryLoad("Client_Master", id, poClient02)) {
                 return poClient02;
             }
 
-            this.poJSON = this.poClient02.openRecord((String) getValue("sEmploy02"));
+            this.poJSON = this.poClient02.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Client_Master", (String) getValue("sEmploy02"), poClient02);
+                ReferenceCache.store("Client_Master", id, poClient02);
                 return this.poClient02;
             }
             this.poClient02.initialize();
@@ -502,20 +516,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poBranchCluster == null) {
             poBranchCluster = new ParamModels(poGRider).BranchCluster();
         }
+        
+        String id = (String) (getValue("sClustrID") == null ? "" : getValue("sClustrID"));
 
-        if (!"".equals(getValue("sClustrID"))) {
+        if (!"".equals(id)) {
             if (this.poBranchCluster.getEditMode() == 1 && this.poBranchCluster
-                    .getClusterID().equals(getValue("sClustrID"))) {
+                    .getClusterID().equals(id)) {
                 return this.poBranchCluster;
             }
 
-            if (ReferenceCache.tryLoad("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster)) {
+            if (ReferenceCache.tryLoad("Branch_Cluster", id, poBranchCluster)) {
                 return poBranchCluster;
             }
 
-            this.poJSON = this.poBranchCluster.openRecord((String) getValue("sClustrID"));
+            this.poJSON = this.poBranchCluster.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster);
+                ReferenceCache.store("Branch_Cluster", id, poBranchCluster);
                 return this.poBranchCluster;
             }
             this.poBranchCluster.initialize();
@@ -530,20 +546,22 @@ public class Model_Cluster_Delivery_Master extends Model {
         if (poTownCity == null) {
             poTownCity = new ParamModels(poGRider).TownCity();
         }
+        
+        String id = (String) (getValue("sTownIDxx") == null ? "" : getValue("sTownIDxx"));
 
-        if (!"".equals(getValue("sTownIDxx"))) {
+        if (!"".equals(id)) {
             if (this.poTownCity.getEditMode() == 1 && this.poTownCity
-                    .getTownId().equals(getValue("sTownIDxx"))) {
+                    .getTownId().equals(id)) {
                 return this.poTownCity;
             }
 
-            if (ReferenceCache.tryLoad("TownCity", (String) getValue("sTownIDxx"), poTownCity)) {
+            if (ReferenceCache.tryLoad("TownCity", id, poTownCity)) {
                 return poTownCity;
             }
 
-            this.poJSON = this.poTownCity.openRecord((String) getValue("sTownIDxx"));
+            this.poJSON = this.poTownCity.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("TownCity", (String) getValue("sTownIDxx"), poTownCity);
+                ReferenceCache.store("TownCity", id, poTownCity);
                 return this.poTownCity;
             }
             this.poTownCity.initialize();

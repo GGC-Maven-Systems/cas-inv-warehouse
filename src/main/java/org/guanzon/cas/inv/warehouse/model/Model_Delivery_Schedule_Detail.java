@@ -138,20 +138,22 @@ public class Model_Delivery_Schedule_Detail extends Model {
         if (poBranchCluster == null) {
             poBranchCluster = new ParamModels(poGRider).BranchCluster();
         }
+        
+        String id = (String) (getValue("sClustrID") == null ? "" : getValue("sClustrID"));
 
-        if (!"".equals(getValue("sClustrID"))) {
+        if (!"".equals(id)) {
             if (this.poBranchCluster.getEditMode() == 1 && this.poBranchCluster
                     .getClusterID().equals(getValue("sClustrID"))) {
                 return this.poBranchCluster;
             }
 
-            if (ReferenceCache.tryLoad("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster)) {
+            if (ReferenceCache.tryLoad("Branch_Cluster", id, poBranchCluster)) {
                 return poBranchCluster;
             }
 
-            this.poJSON = this.poBranchCluster.openRecord((String) getValue("sClustrID"));
+            this.poJSON = this.poBranchCluster.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch_Cluster", (String) getValue("sClustrID"), poBranchCluster);
+                ReferenceCache.store("Branch_Cluster", id, poBranchCluster);
                 return this.poBranchCluster;
             }
             this.poBranchCluster.initialize();

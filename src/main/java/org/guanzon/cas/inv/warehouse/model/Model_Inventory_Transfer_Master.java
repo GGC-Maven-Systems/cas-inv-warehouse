@@ -344,20 +344,22 @@ public class Model_Inventory_Transfer_Master extends Model {
         if (poTrucking == null) {
             poTrucking = new ClientModels(poGRider).ClientMaster();
         }
+        
+        String id = (String) (getValue("sTruckIDx") == null ? "" : getValue("sTruckIDx"));
 
-        if (!"".equals(getValue("sTruckIDx"))) {
+        if (!"".equals(id)) {
             if (this.poTrucking.getEditMode() == 1 && this.poTrucking
-                    .getClientId().equals(getValue("sTruckIDx"))) {
+                    .getClientId().equals(id)) {
                 return this.poTrucking;
             }
 
-            if (ReferenceCache.tryLoad("Client_Master", (String) getValue("sTruckIDx"), poTrucking)) {
+            if (ReferenceCache.tryLoad("Client_Master", id, poTrucking)) {
                 return poTrucking;
             }
 
-            this.poJSON = this.poTrucking.openRecord((String) getValue("sTruckIDx"));
+            this.poJSON = this.poTrucking.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Client_Master", (String) getValue("sTruckIDx"), poTrucking);
+                ReferenceCache.store("Client_Master", id, poTrucking);
                 return this.poTrucking;
             }
             this.poTrucking.initialize();
@@ -371,20 +373,22 @@ public class Model_Inventory_Transfer_Master extends Model {
         if (poBranchDestination == null) {
             poBranchDestination = new ParamModels(poGRider).Branch();
         }
+        
+        String id = (String) (getValue("sDestinat") == null ? "" : getValue("sDestinat"));
 
-        if (!"".equals(getValue("sDestinat"))) {
+        if (!"".equals(id)) {
             if (this.poBranchDestination.getEditMode() == 1 && this.poBranchDestination
-                    .getBranchCode().equals(getValue("sDestinat"))) {
+                    .getBranchCode().equals(id)) {
                 return this.poBranchDestination;
             }
 
-            if (ReferenceCache.tryLoad("Branch", (String) getValue("sDestinat"), poBranchDestination)) {
+            if (ReferenceCache.tryLoad("Branch", id, poBranchDestination)) {
                 return poBranchDestination;
             }
 
-            this.poJSON = this.poBranchDestination.openRecord((String) getValue("sDestinat"));
+            this.poJSON = this.poBranchDestination.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch", (String) getValue("sDestinat"), poBranchDestination);
+                ReferenceCache.store("Branch", id, poBranchDestination);
                 return this.poBranchDestination;
             }
             this.poBranchDestination.initialize();
@@ -399,19 +403,21 @@ public class Model_Inventory_Transfer_Master extends Model {
             poCategory = new ParamModels(poGRider).Category();
         }
 
-        if (!"".equals(getValue("sCategrCd"))) {
+        String id = (String) (getValue("sCategrCd") == null ? "" : getValue("sCategrCd"));
+        
+        if (!"".equals(id)) {
             if (this.poCategory.getEditMode() == 1 && this.poCategory
-                    .getCategoryId().equals(getValue("sCategrCd"))) {
+                    .getCategoryId().equals(id)) {
                 return this.poCategory;
             }
 
-            if (ReferenceCache.tryLoad("Category", (String) getValue("sCategrCd"), poCategory)) {
+            if (ReferenceCache.tryLoad("Category", id, poCategory)) {
                 return poCategory;
             }
 
-            this.poJSON = this.poCategory.openRecord((String) getValue("sCategrCd"));
+            this.poJSON = this.poCategory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Category", (String) getValue("sCategrCd"), poCategory);
+                ReferenceCache.store("Category", id, poCategory);
                 return this.poCategory;
             }
             this.poCategory.initialize();
@@ -426,19 +432,21 @@ public class Model_Inventory_Transfer_Master extends Model {
             poBranch = new ParamModels(poGRider).Branch();
         }
 
-        if (!"".equals(getValue("sBranchCd"))) {
+        String id = (String) (getValue("sBranchCd") == null ? "" : getValue("sBranchCd"));
+        
+        if (!"".equals(id)) {
             if (this.poBranch.getEditMode() == 1 && this.poBranch
-                    .getBranchCode().equals(getValue("sBranchCd"))) {
+                    .getBranchCode().equals(id)) {
                 return this.poBranch;
             }
 
-            if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+            if (ReferenceCache.tryLoad("Branch", id, poBranch)) {
                 return poBranch;
             }
 
-            this.poJSON = this.poBranch.openRecord((String) getValue("sBranchCd"));
+            this.poJSON = this.poBranch.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
+                ReferenceCache.store("Branch", id, poBranch);
                 return this.poBranch;
             }
             this.poBranch.initialize();
@@ -452,20 +460,22 @@ public class Model_Inventory_Transfer_Master extends Model {
         if (poCompany == null) {
             poCompany = new ParamModels(poGRider).Company();
         }
+        
+        String id = (String) (getValue("sCompnyID") == null ? "" : getValue("sCompnyID"));
 
-        if (!"".equals(getValue("sCompnyID"))) {
+        if (!"".equals(id)) {
             if (this.poCompany.getEditMode() == 1 && this.poCompany
-                    .getCompanyId().equals(getValue("sCompnyID"))) {
+                    .getCompanyId().equals(id)) {
                 return this.poCompany;
             }
 
-            if (ReferenceCache.tryLoad("Company", (String) getValue("sCompnyID"), poCompany)) {
+            if (ReferenceCache.tryLoad("Company", id, poCompany)) {
                 return poCompany;
             }
 
-            this.poJSON = this.poCompany.openRecord((String) getValue("sCompnyID"));
+            this.poJSON = this.poCompany.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Company", (String) getValue("sCompnyID"), poCompany);
+                ReferenceCache.store("Company", id, poCompany);
                 return this.poCompany;
             }
             this.poCompany.initialize();
@@ -480,6 +490,8 @@ public class Model_Inventory_Transfer_Master extends Model {
             poIndustry = new ParamModels(poGRider).Industry();
         }
 
+        String id = (String) (getValue("sCompnyID") == null ? "" : getValue("sCompnyID"));
+        
         if (!"".equals(getValue("sIndstCdx"))) {
             if (this.poIndustry.getEditMode() == 1 && this.poIndustry
                     .getIndustryId().equals(getValue("sIndstCdx"))) {
@@ -507,19 +519,21 @@ public class Model_Inventory_Transfer_Master extends Model {
             poProject = new ParamModels(poGRider).Project();
         }
 
-        if (!"".equals(getValue("sProjCode"))) {
+        String id = (String) (getValue("sProjCode") == null ? "" : getValue("sProjCode"));
+        
+        if (!"".equals(id)) {
             if (this.poProject.getEditMode() == 1 && this.poProject
-                    .getProjectID().equals(getValue("sProjCode"))) {
+                    .getProjectID().equals(id)) {
                 return this.poProject;
             }
 
-            if (ReferenceCache.tryLoad("Project", (String) getValue("sProjCode"), poProject)) {
+            if (ReferenceCache.tryLoad("Project", id, poProject)) {
                 return poProject;
             }
 
-            this.poJSON = this.poProject.openRecord((String) getValue("sProjCode"));
+            this.poJSON = this.poProject.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Project", (String) getValue("sProjCode"), poProject);
+                ReferenceCache.store("Project", id, poProject);
                 return this.poProject;
             }
             this.poProject.initialize();

@@ -198,19 +198,21 @@ public class Model_Delivery_Schedule_Master extends Model {
             poCategory = new ParamModels(poGRider).Category();
         }
 
-        if (!"".equals(getValue("sCategrCd"))) {
+        String id = (String) (getValue("sCategrCd") == null ? "" : getValue("sCategrCd"));
+        
+        if (!"".equals(id)) {
             if (this.poCategory.getEditMode() == 1 && this.poCategory
-                    .getCategoryId().equals(getValue("sCategrCd"))) {
+                    .getCategoryId().equals(id)) {
                 return this.poCategory;
             }
 
-            if (ReferenceCache.tryLoad("Category", (String) getValue("sCategrCd"), poCategory)) {
+            if (ReferenceCache.tryLoad("Category", id, poCategory)) {
                 return poCategory;
             }
 
-            this.poJSON = this.poCategory.openRecord((String) getValue("sCategrCd"));
+            this.poJSON = this.poCategory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Category", (String) getValue("sCategrCd"), poCategory);
+                ReferenceCache.store("Category", id, poCategory);
                 return this.poCategory;
             }
             this.poCategory.initialize();
@@ -225,19 +227,21 @@ public class Model_Delivery_Schedule_Master extends Model {
             poBranch = new ParamModels(poGRider).Branch();
         }
 
-        if (!"".equals(getValue("sBranchCd"))) {
+        String id = (String) (getValue("sBranchCd") == null ? "" : getValue("sBranchCd"));
+        
+        if (!"".equals(id)) {
             if (this.poBranch.getEditMode() == 1 && this.poBranch
                     .getBranchCode().equals(getValue("sBranchCd"))) {
                 return this.poBranch;
             }
 
-            if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+            if (ReferenceCache.tryLoad("Branch", id, poBranch)) {
                 return poBranch;
             }
 
-            this.poJSON = this.poBranch.openRecord((String) getValue("sBranchCd"));
+            this.poJSON = this.poBranch.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
+                ReferenceCache.store("Branch", id, poBranch);
                 return this.poBranch;
             }
             this.poBranch.initialize();
@@ -252,19 +256,21 @@ public class Model_Delivery_Schedule_Master extends Model {
             poCompany = new ParamModels(poGRider).Company();
         }
 
-        if (!"".equals(getValue("sCompnyID"))) {
+        String id = (String) (getValue("sCompnyID") == null ? "" : getValue("sCompnyID"));
+        
+        if (!"".equals(id)) {
             if (this.poCompany.getEditMode() == 1 && this.poCompany
-                    .getCompanyId().equals(getValue("sCompnyID"))) {
+                    .getCompanyId().equals(id)) {
                 return this.poCompany;
             }
 
-            if (ReferenceCache.tryLoad("Company", (String) getValue("sCompnyID"), poCompany)) {
+            if (ReferenceCache.tryLoad("Company", id, poCompany)) {
                 return poCompany;
             }
 
-            this.poJSON = this.poCompany.openRecord((String) getValue("sCompnyID"));
+            this.poJSON = this.poCompany.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Company", (String) getValue("sCompnyID"), poCompany);
+                ReferenceCache.store("Company", id, poCompany);
                 return this.poCompany;
             }
             this.poCompany.initialize();
@@ -278,20 +284,22 @@ public class Model_Delivery_Schedule_Master extends Model {
         if (poIndustry == null) {
             poIndustry = new ParamModels(poGRider).Industry();
         }
+        
+        String id = (String) (getValue("sIndstCdx") == null ? "" : getValue("sIndstCdx"));
 
-        if (!"".equals(getValue("sIndstCdx"))) {
+        if (!"".equals(id)) {
             if (this.poIndustry.getEditMode() == 1 && this.poIndustry
-                    .getIndustryId().equals(getValue("sIndstCdx"))) {
+                    .getIndustryId().equals(id)) {
                 return this.poIndustry;
             }
 
-            if (ReferenceCache.tryLoad("Industry", (String) getValue("sIndstCdx"), poIndustry)) {
+            if (ReferenceCache.tryLoad("Industry", id, poIndustry)) {
                 return poIndustry;
             }
 
-            this.poJSON = this.poIndustry.openRecord((String) getValue("sIndstCdx"));
+            this.poJSON = this.poIndustry.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
-                ReferenceCache.store("Industry", (String) getValue("sIndstCdx"), poIndustry);
+                ReferenceCache.store("Industry", id, poIndustry);
                 return this.poIndustry;
             }
             this.poIndustry.initialize();
