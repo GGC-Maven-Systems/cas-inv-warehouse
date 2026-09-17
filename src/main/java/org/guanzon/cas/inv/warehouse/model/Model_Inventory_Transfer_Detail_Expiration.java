@@ -138,13 +138,15 @@ public class Model_Inventory_Transfer_Detail_Expiration extends Model {
         if (poInventory == null) {
             poInventory = new InvModels(poGRider).Inventory();
         }
+        
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
 
-        if (!"".equals(getValue("sStockIDx"))) {
+        if (!"".equals(id)) {
             if (this.poInventory.getEditMode() == 1 && this.poInventory
-                    .getStockId().equals(getValue("sStockIDx"))) {
+                    .getStockId().equals(id)) {
                 return this.poInventory;
             }
-            this.poJSON = this.poInventory.openRecord((String) getValue("sStockIDx"));
+            this.poJSON = this.poInventory.openRecord(id);
             if ("success".equals(this.poJSON.get("result"))) {
                 return this.poInventory;
             }
