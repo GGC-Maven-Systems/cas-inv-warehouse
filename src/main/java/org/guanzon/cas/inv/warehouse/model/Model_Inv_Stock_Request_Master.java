@@ -11,12 +11,9 @@ import org.guanzon.appdriver.base.SQLUtil;
 import org.guanzon.appdriver.constant.EditMode;
 import org.guanzon.cas.inv.warehouse.status.StockRequestStatus;
 import org.guanzon.cas.parameter.model.Model_Branch;
-import org.guanzon.cas.parameter.model.Model_Branch_Cluster;
-import org.guanzon.cas.parameter.model.Model_Branch_Others;
 import org.guanzon.cas.parameter.model.Model_Category;
 import org.guanzon.cas.parameter.model.Model_Company;
 import org.guanzon.cas.parameter.model.Model_Industry;
-import org.guanzon.cas.parameter.model.Model_Project;
 import org.guanzon.cas.parameter.services.ParamModels;
 import org.json.simple.JSONObject;
 
@@ -256,19 +253,21 @@ public class Model_Inv_Stock_Request_Master extends Model {
             poBranch = new ParamModels(poGRider).Branch();
         }
 
-        if (!"".equals((String) getValue("sBranchCd"))) {
+        String id = (String) (getValue("sBranchCd") == null ? "" : getValue("sBranchCd"));
+        
+        if (!"".equals(id)) {
             if (poBranch.getEditMode() == EditMode.READY
-                    && poBranch.getBranchCode().equals((String) getValue("sBranchCd"))) {
+                    && poBranch.getBranchCode().equals(id)) {
                 return poBranch;
             } else {
-                if (ReferenceCache.tryLoad("Branch", (String) getValue("sBranchCd"), poBranch)) {
+                if (ReferenceCache.tryLoad("Branch", id, poBranch)) {
                     return poBranch;
                 }
 
-                poJSON = poBranch.openRecord((String) getValue("sBranchCd"));
+                poJSON = poBranch.openRecord(id);
 
                 if ("success".equals((String) poJSON.get("result"))) {
-                    ReferenceCache.store("Branch", (String) getValue("sBranchCd"), poBranch);
+                    ReferenceCache.store("Branch", id, poBranch);
                     return poBranch;
                 } else {
                     poBranch.initialize();
@@ -286,20 +285,22 @@ public class Model_Inv_Stock_Request_Master extends Model {
         if (poIndustry == null) {
             poIndustry = new ParamModels(poGRider).Industry();
         }
+        
+        String id = (String) (getValue("sIndstCdx") == null ? "" : getValue("sIndstCdx"));
 
-        if (!"".equals((String) getValue("sIndstCdx"))) {
+        if (!"".equals(id)) {
             if (poIndustry.getEditMode() == EditMode.READY
-                    && poIndustry.getIndustryId().equals((String) getValue("sIndstCdx"))) {
+                    && poIndustry.getIndustryId().equals(id)) {
                 return poIndustry;
             } else {
-                if (ReferenceCache.tryLoad("Industry", (String) getValue("sIndstCdx"), poIndustry)) {
+                if (ReferenceCache.tryLoad("Industry", id, poIndustry)) {
                     return poIndustry;
                 }
 
-                poJSON = poIndustry.openRecord((String) getValue("sIndstCdx"));
+                poJSON = poIndustry.openRecord(id);
 
                 if ("success".equals((String) poJSON.get("result"))) {
-                    ReferenceCache.store("Industry", (String) getValue("sIndstCdx"), poIndustry);
+                    ReferenceCache.store("Industry", id, poIndustry);
                     return poIndustry;
                 } else {
                     poIndustry.initialize();
@@ -316,20 +317,22 @@ public class Model_Inv_Stock_Request_Master extends Model {
         if (poCategory == null) {
             poCategory = new ParamModels(poGRider).Category();
         }
+        
+        String id = (String) (getValue("sCategrCd") == null ? "" : getValue("sCategrCd"));
 
-        if (!"".equals((String) getValue("sCategrCd"))) {
+        if (!"".equals(id)) {
             if (poCategory.getEditMode() == EditMode.READY
-                    && poCategory.getCategoryId().equals((String) getValue("sCategrCd"))) {
+                    && poCategory.getCategoryId().equals(id)) {
                 return poCategory;
             } else {
-                if (ReferenceCache.tryLoad("Category", (String) getValue("sCategrCd"), poCategory)) {
+                if (ReferenceCache.tryLoad("Category", id, poCategory)) {
                     return poCategory;
                 }
 
-                poJSON = poCategory.openRecord((String) getValue("sCategrCd"));
+                poJSON = poCategory.openRecord(id);
 
                 if ("success".equals((String) poJSON.get("result"))) {
-                    ReferenceCache.store("Category", (String) getValue("sCategrCd"), poCategory);
+                    ReferenceCache.store("Category", id, poCategory);
                     return poCategory;
                 } else {
                     poCategory.initialize();
@@ -347,19 +350,21 @@ public class Model_Inv_Stock_Request_Master extends Model {
         if (poCompany == null) {
             poCompany = new ParamModels(poGRider).Company();
         }
+        
+        String id = (String) (getValue("sCompnyID") == null ? "" : getValue("sCompnyID"));
 
-        if (!"".equals((String) getValue("sCompnyID"))) {
+        if (!"".equals(id)) {
             if (poCompany.getEditMode() == EditMode.READY
-                    && poCompany.getCompanyId().equals((String) getValue("sCompnyID"))) {
+                    && poCompany.getCompanyId().equals(id)) {
                 return poCompany;
             } else {
-                if (ReferenceCache.tryLoad("Company", (String) getValue("sCompnyID"), poCompany)) {
+                if (ReferenceCache.tryLoad("Company", id, poCompany)) {
                     return poCompany;
                 }
 
-                poJSON = poCompany.openRecord((String) getValue("sCompnyID"));
+                poJSON = poCompany.openRecord(id);
                 if ("success".equals((String) poJSON.get("result"))) {
-                    ReferenceCache.store("Company", (String) getValue("sCompnyID"), poCompany);
+                    ReferenceCache.store("Company", id, poCompany);
                     return poCompany;
                 } else {
                     poCompany.initialize();

@@ -271,12 +271,14 @@ public class Model_Inv_Stock_Request_Detail extends Model {
             poInvMaster = new InvModels(poGRider).InventoryMaster();
         }
 
-        if (!"".equals((String) getValue("sStockIDx"))) {
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
+        
+        if (!"".equals(id)) {
             if (poInvMaster.getEditMode() == EditMode.READY
-                    && poInvMaster.getStockId().equals((String) getValue("sStockIDx"))) {
+                    && poInvMaster.getStockId().equals(id)) {
                 return poInvMaster;
             } else {
-                poJSON= poInvMaster.openRecord((String) getValue("sStockIDx"),poGRider.getIndustry(),poGRider.getBranchCode());
+                poJSON= poInvMaster.openRecord(id,poGRider.getIndustry(),poGRider.getBranchCode());
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poInvMaster;
@@ -295,13 +297,15 @@ public class Model_Inv_Stock_Request_Detail extends Model {
         if (poInventory == null) {
             poInventory = new InvModels(poGRider).Inventory();
         }
+        
+        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
 
-        if (!"".equals((String) getValue("sStockIDx"))) {
+        if (!"".equals(id)) {
             if (poInventory.getEditMode() == EditMode.READY
-                    && poInventory.getStockId().equals((String) getValue("sStockIDx"))) {
+                    && poInventory.getStockId().equals(id)) {
                 return poInventory;
             } else {
-                poJSON = poInventory.openRecord((String) getValue("sStockIDx"));
+                poJSON = poInventory.openRecord(id);
 
                 if ("success".equals((String) poJSON.get("result"))) {
                     return poInventory;
@@ -354,24 +358,27 @@ public class Model_Inv_Stock_Request_Detail extends Model {
 
         return poJSON;
     }
+    
     public Model_Brand Brand() throws GuanzonException, SQLException {
         if (poBrand == null) {
             poBrand = new ParamModels(poGRider).Brand();
         }
+        
+        String id = getBrandId() == null ? "" : getBrandId();
 
-        if (!"".equals(getBrandId())) {
+        if (!"".equals(id)) {
             if (poBrand.getEditMode() == EditMode.READY
-                    && poBrand.getBrandId().equals(getBrandId())) {
+                    && poBrand.getBrandId().equals(id)) {
                 return poBrand;
             }
 
-            if (ReferenceCache.tryLoad("Brand", getBrandId(), poBrand)) {
+            if (ReferenceCache.tryLoad("Brand", id, poBrand)) {
                 return poBrand;
             }
 
             poJSON = poBrand.openRecord(getBrandId());
             if ("success".equals((String) poJSON.get("result"))) {
-                ReferenceCache.store("Brand", getBrandId(), poBrand);
+                ReferenceCache.store("Brand", id, poBrand);
                 return poBrand;
             } else {
                 poBrand.initialize();
