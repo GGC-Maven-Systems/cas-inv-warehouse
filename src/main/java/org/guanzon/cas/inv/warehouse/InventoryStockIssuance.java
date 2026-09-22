@@ -885,18 +885,15 @@ public class InventoryStockIssuance extends Transaction {
             if (loDetail.getReferNo() != null
                     && !loDetail.getReferNo().isEmpty()) {
 
-                if (!loDetail.InventoryTransfer().getMaster()
+                if (loDetail.InventoryTransfer().getMaster()
                         .getTransactionStatus().equals(InventoryStockIssuanceStatus.OPEN)) {
-                    poJSON.put("result", "error");
-                    poJSON.put("message", "Cofirmed delivery Detected. Row =" + lnCtr + 1);
-                    return poJSON;
-                }
-                poJSON = VoidTransactionDelivery(lnCtr + 1);
 
-                if ("error".equals((String) poJSON.get("result"))) {
-                    if (((String) poJSON.get("message")).contains("already")) {
-                        poJSON = new JSONObject();
-                        poJSON.put("result", "success");
+                    poJSON = VoidTransactionDelivery(lnCtr + 1);
+                    if ("error".equals((String) poJSON.get("result"))) {
+                        if (((String) poJSON.get("message")).contains("already")) {
+                            poJSON = new JSONObject();
+                            poJSON.put("result", "success");
+                        }
                     }
                 }
 
