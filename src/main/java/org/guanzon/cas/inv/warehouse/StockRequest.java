@@ -1341,9 +1341,9 @@ public class StockRequest extends Transaction {
 
                 //remove this validation upon request of maam she 09/21/2026 base on the JIRA
                 //
-            if (!poGRider.isMainOffice() || !poGRider.isWarehouse()) {
+//            if (!poGRider.isMainOffice() || !poGRider.isWarehouse()) {
                 lsSQL = lsSQL + " AND a.sBranchCd LIKE " + SQLUtil.toSQL(poGRider.getBranchCode());
-            }
+//            }
             lsSQL = lsSQL +  " ORDER BY dTransact ASC";
             System.out.println("Executing SQL: " + lsSQL);
             // Measure SQL execution time only
