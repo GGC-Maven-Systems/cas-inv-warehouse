@@ -297,8 +297,13 @@ public class Model_Inv_Stock_Request_Detail extends Model {
         if (poInventory == null) {
             poInventory = new InvModels(poGRider).Inventory();
         }
-        
-        String id = (String) (getValue("sStockIDx") == null ? "" : getValue("sStockIDx"));
+
+        String id = (String) getValue("sStockIDx");
+
+        if (id == null) {
+            id = "";
+        }
+
 
         if (!"".equals(id)) {
             if (poInventory.getEditMode() == EditMode.READY
