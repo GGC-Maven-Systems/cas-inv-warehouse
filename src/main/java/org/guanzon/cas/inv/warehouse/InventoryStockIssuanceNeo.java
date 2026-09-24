@@ -1589,6 +1589,7 @@ public class InventoryStockIssuanceNeo extends Transaction {
         if (!psIndustryCode.isEmpty()) {
             lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
         }
+        System.out.println("searchTransactionDestination : " + lsSQL);
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,
                 value,
@@ -2113,12 +2114,14 @@ public class InventoryStockIssuanceNeo extends Transaction {
                     LocalDateTime dModified = loRS.getObject("dModified", LocalDateTime.class);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
                     lsConfirmedDate = dModified.format(formatter);
+                    System.out.println("lsConfirmedBy : " + lsConfirmedBy);
                 }
             }
         }
 
         MiscUtil.close(loRS);
 
+        System.out.println("ConfirmNme : " + lsConfirmedBy);
         poReportJasper.addParameter("PrepNme", lsPreparedBy + " - " + lsPreparedByDate);
         poReportJasper.addParameter("ConfirmNme", lsConfirmedBy + " - " + lsConfirmedDate);
         poReportJasper.addParameter("ReceivrNme", "");
@@ -2331,14 +2334,17 @@ public class InventoryStockIssuanceNeo extends Transaction {
                 if (loRS.getString("sModified") != null && !"".equals(loRS.getString("sModified"))) {
                     lsConfirmedBy = poGRider.Decrypt(loRS.getString("sModified")) == null ? "" : poGRider.Decrypt(loRS.getString("sModified"));
                     LocalDateTime dModified = loRS.getObject("dModified", LocalDateTime.class);
+                    lsConfirmedBy = getSysUser(lsConfirmedBy);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
                     lsConfirmedDate = dModified.format(formatter);
+
+                    System.out.println("lsConfirmedBy : " + lsConfirmedBy);
                 }
             }
         }
 
         MiscUtil.close(loRS);
-
+        System.out.println("ConfirmNme : " + lsConfirmedBy);
         poReportJasper.addParameter("PrepNme", lsPreparedBy + " - " + lsPreparedByDate);
         poReportJasper.addParameter("ConfirmNme", lsConfirmedBy + " - " + lsConfirmedDate);
         poReportJasper.addParameter("ReceivrNme", "");
