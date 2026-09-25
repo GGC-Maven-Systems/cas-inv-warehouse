@@ -120,6 +120,7 @@ public class InventoryRequestApproval extends Transaction {
                 + ", a.sIndstCdx"
                 + ", a.sCategrCd"
                 + ", a.sTransNox"
+                + ", a.dTransact"
                 + " FROM Inv_Stock_Request_Master a"
                 + "     LEFT JOIN Branch_Others b ON a.sBranchCD = b.sBranchCd"
                 + "     LEFT JOIN Branch_Cluster c ON b.sClustrID = c.sClustrID AND a.sIndstCdx = c.sIndstCdx "
@@ -268,6 +269,7 @@ public class InventoryRequestApproval extends Transaction {
         initSQL();
         String lsSQL = SQL_BROWSE;
 
+
         if (poCluster != null && !"".equals(poCluster.getValue("sClustrID"))) {
             lsSQL = MiscUtil.addCondition(lsSQL, "c.sClustrID = " + SQLUtil.toSQL(poCluster.getValue("sClustrID")));
         }
@@ -277,6 +279,7 @@ public class InventoryRequestApproval extends Transaction {
         if (!psCategorCD.isEmpty()) {
             lsSQL = MiscUtil.addCondition(lsSQL, "a.sCategrCd = " + SQLUtil.toSQL(psCategorCD));
         }
+        System.out.println("SQL_BROWSE: " + lsSQL);
         ResultSet loRS = poGRider.executeQuery(lsSQL);
 
         if (MiscUtil.RecordCount(loRS)
@@ -287,14 +290,29 @@ public class InventoryRequestApproval extends Transaction {
         }
 
         while (loRS.next()) {
-            Model_Inv_Stock_Request_Master loInventoryStockRequest = new InvWarehouseModels(poGRider).InventoryStockRequestMaster();
-            poJSON = loInventoryStockRequest.openRecord(loRS.getString("sTransNox"));
+            Model_Inv_Stock_Request_Master loInventoryStockRequest =
+                    new InvWarehouseModels(poGRider).InventoryStockRequestMaster();
 
-            if ("success".equals((String) poJSON.get("result"))) {
-                paMaster.add((Model) loInventoryStockRequest);
-            } else {
-                return poJSON;
+            for (int lnCtr = 1; lnCtr <= loRS.getMetaData().getColumnCount(); ++lnCtr) {
+
+//                String lsColumnName = loRS.getMetaData().getColumnName(lnCtr);
+//
+//                System.out.println(
+//                        "Column [" + lnCtr + "] = " + lsColumnName +
+//                                " | Value = " + loRS.getObject(lnCtr)
+//                );
+                loInventoryStockRequest.setValue("sBranchCd", loRS.getObject("sBranchCd"));
+                loInventoryStockRequest.setValue("sTransNox", loRS.getObject("sTransNox"));
+                loInventoryStockRequest.setValue("dTransact", loRS.getObject("dTransact"));
+
+//                if (lnCtr == 2 || lnCtr == 5 || lnCtr == 6) {
+//                    loInventoryStockRequest.setValue(lsColumnName, loRS.getObject(lnCtr));
+//                } else {
+//                    continue;
+//                }
             }
+
+            paMaster.add((Model) loInventoryStockRequest);
         }
 
         poJSON = new JSONObject();
