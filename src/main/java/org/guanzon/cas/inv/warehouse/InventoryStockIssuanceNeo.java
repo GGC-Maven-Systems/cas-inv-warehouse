@@ -1586,9 +1586,9 @@ public class InventoryStockIssuanceNeo extends Transaction {
             return poJSON;
         }
         String lsSQL = "SELECT sBranchCd, sBranchNm FROM Branch";
-        if (!psIndustryCode.isEmpty()) {
-            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
-        }
+//        if (!psIndustryCode.isEmpty()) {
+//            lsSQL = MiscUtil.addCondition(lsSQL, "sIndstCdx = " + SQLUtil.toSQL(psIndustryCode));
+//        }
         System.out.println("searchTransactionDestination : " + lsSQL);
         poJSON = ShowDialogFX.Search(poGRider,
                 lsSQL,

@@ -25,11 +25,11 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -79,7 +79,12 @@ public class ReportUtil {
     private ResultSet loRSRecord;
     private JasperPrint reportPrint = null;
     private JRResultSetDataSource JasperResultResultSetData = null;
-    private JRBeanCollectionDataSource JasperCollectionData = null;
+
+    // Widened from JRBeanCollectionDataSource -> JRDataSource so this utility can
+    // accept ANY datasource type (bean collections, map collections, custom
+    // JRDataSource implementations) across all reports, not just bean-backed ones.
+    private JRDataSource JasperCollectionData = null;
+
     Stage reportStage = null;
 
     public ReportUtil(GRiderCAS applicationDriver) {
@@ -114,8 +119,14 @@ public class ReportUtil {
         psSQLRecord = SQLRecord;
     }
 
-    public void setJRBeanCollectionDataSource(JRBeanCollectionDataSource listCollection) {
-        JasperCollectionData = listCollection;
+    /**
+     * Accepts any JRDataSource implementation: JRBeanCollectionDataSource,
+     * JRMapCollectionDataSource, or a custom JRDataSource. Existing callers
+     * passing JRBeanCollectionDataSource continue to work unchanged, since
+     * JRBeanCollectionDataSource implements JRDataSource.
+     */
+    public void setJRBeanCollectionDataSource(JRDataSource dataSource) {
+        JasperCollectionData = dataSource;
     }
 
     public void setJasperPrint(JasperPrint jasperPrintData) {
@@ -192,7 +203,7 @@ public class ReportUtil {
             return poJSON;
 
         }
-        //collection
+        //collection (bean OR map OR any custom JRDataSource)
         if (JasperCollectionData != null) {
             reportPrint = JasperFillManager.fillReport(poGRider.getReportPath() + psJasperPath + ".jasper",
                     poParamater,
@@ -458,9 +469,9 @@ public class ReportUtil {
     }
 
     private JSONObject showUI() throws JRException, SQLException {
-       
+
         ReportUtilViewController loController = new ReportUtilViewController();
-         URL fxURLResource = loController.getClass().getResource(
+        URL fxURLResource = loController.getClass().getResource(
                 "/org/guanzon/cas/inv/warehouse/report/view/ReportUtilView.fxml"
         );
         FXMLLoader fxmlLoader = new FXMLLoader(fxURLResource);
